@@ -1,4 +1,5 @@
 import axios from 'axios';
+import fs from 'fs';
 import XLSX from 'xlsx';
 import { join } from 'path';
 import pkg from 'lodash';
@@ -74,16 +75,16 @@ const readFileXlsxAndFormatDHIS2 = async (_tab) => {
             : null;
         if (month && pyramide && value && UID) {
           results.push({
-            dataelement: UID,
+            dataElement: UID,
             period: `${element['ig_annee']}${
               month !== undefined ? month.id : ''
             }`,
             OrgUnit: pyramide['OrgUnit'],
-            categoryoptioncombo: 'c6PwdArn3fZ',
-            attributeoptioncombo: 'c6PwdArn3fZ',
+            categoryOptionCombo: 'c6PwdArn3fZ',
+            attributeOptionCombo: 'c6PwdArn3fZ',
             value: value === 'non' ? 0 : value === 'oui' ? 1 : value,
             storedBy: 'imported',
-            lastupdated: dayjs(element['submissionDate']).format('YYYY-MM-DD'),
+            lastUpdated: dayjs(element['submissionDate']).format('YYYY-MM-DD'),
             comment: '',
             followup: false,
             deleted: null,
@@ -126,7 +127,7 @@ async function importDataToDHIS2(processedData) {
     const form = {
       dataValues: processedData,
     };
-
+    fs.writeFileSync('./dhis2.json', JSON.stringify(form));
     const response = await axios.post(
       `${DHIS2_SERVER_URL}/api/dataValueSets?async=true&skipAudit=true`,
       form,
