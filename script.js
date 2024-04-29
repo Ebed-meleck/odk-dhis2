@@ -79,7 +79,7 @@ const readFileXlsxAndFormatDHIS2 = async (_tab) => {
             period: `${element['ig_annee']}${
               month !== undefined ? month.id : ''
             }`,
-            OrgUnit: pyramide['OrgUnit'],
+            orgUnit: pyramide['OrgUnit'],
             categoryOptionCombo: 'c6PwdArn3fZ',
             attributeOptionCombo: 'c6PwdArn3fZ',
             value: value === 'non' ? 0 : value === 'oui' ? 1 : value,
@@ -202,9 +202,9 @@ async function main() {
     // Télécharger le fichier depuis ODK Central
     const result = await downloadFileFromODKCentral(formId, submissionId);
     let start = 0;
-    let end = 500;
+    let end = 600;
     const indexs = result.length / end;
-    const index = parseInt(indexs, 10);
+    const index = parseInt(indexs + 1, 10);
     for (let i = 0; i < index; i++) {
       start = i * end;
       end = start + end;
@@ -212,7 +212,7 @@ async function main() {
       const format = formatData(data);
       const processedData = await readFileXlsxAndFormatDHIS2(format);
       await importDataToDHIS2(processedData);
-      log(`Send successfully`);
+      console.log(`Send successfully ${i + 1}`);
     }
     // console.log(processedData.length);
     log.clear();
