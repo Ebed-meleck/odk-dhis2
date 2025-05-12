@@ -217,7 +217,7 @@ async function main() {
     // console.log(processedData.length);
     log.clear();
     log.done();
-    process.exit(1);
+    process.exit(0);
   } catch (error) {
     log.clear();
     console.error('Une erreur est survenue:', error.message);
